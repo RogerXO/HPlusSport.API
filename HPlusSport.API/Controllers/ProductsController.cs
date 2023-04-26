@@ -20,9 +20,16 @@ namespace HPlusSport.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetProducts()
+        public ActionResult GetAllProducts()
         {
             return Ok(_context.Products.ToList());
+        }
+
+        [HttpGet] [Route("{id}")]
+        public ActionResult GetProduct(int id)
+        {
+            var product = _context.Products.Find(id);
+            return Ok(product);
         }
     }
 }
