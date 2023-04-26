@@ -11,9 +11,9 @@ namespace HPlusSport.API.Controllers
     public class ProductsController : ControllerBase
     {
         [HttpGet]
-        public void GetProducts()
+        public string GetProducts()
         {
-
+            return "OK";
         }
     }
 }
