@@ -10,10 +10,19 @@ namespace HPlusSport.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet]
-        public string GetProducts()
+        private readonly ShopContext _context;
+        
+        public ProductsController(ShopContext context)
         {
-            return "OK";
+            _context = context;
+
+            _context.Database.EnsureCreated();
+        }
+
+        [HttpGet]
+        public IEnumerable<Product> GetProducts()
+        {
+            return _context.Products.ToList();
         }
     }
 }
