@@ -20,15 +20,15 @@ namespace HPlusSport.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetAllProducts()
+        public async Task<ActionResult> GetAllProducts()
         {
-            return Ok(_context.Products.ToList());
+            return Ok(await _context.Products.ToListAsync());
         }
 
         [HttpGet] [Route("{id}")]
-        public ActionResult GetProduct(int id)
+        public async Task<ActionResult> GetProduct(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
