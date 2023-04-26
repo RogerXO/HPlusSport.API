@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ShopContext>(Options => Options.UseInMemoryDatabase("Shop"));
+builder.Services.AddDbContext<ShopContext>(options => options.UseInMemoryDatabase("Shop"));
 
 var app = builder.Build();
 
