@@ -9,7 +9,7 @@ namespace HPlusSport.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ShopContext _context;
-        
+
         public ProductsController(ShopContext context)
         {
             _context = context;
@@ -23,8 +23,9 @@ namespace HPlusSport.API.Controllers
             return Ok(await _context.Products.ToListAsync());
         }
 
-        [HttpGet] [Route("{id}")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProduct(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
@@ -35,7 +36,7 @@ namespace HPlusSport.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct (Product product)
+        public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             if (!ModelState.IsValid)
             {
@@ -46,8 +47,8 @@ namespace HPlusSport.API.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(
-                "GetProducts", 
-                new {id = product.Id},
+                "GetProducts",
+                new { id = product.Id },
                 product);
         }
 
@@ -67,7 +68,7 @@ namespace HPlusSport.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if(!_context.Products.Any(p => p.Id == id))
+                if (!_context.Products.Any(p => p.Id == id))
                 {
                     return NotFound();
                 }
@@ -78,6 +79,19 @@ namespace HPlusSport.API.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Product>> RemoveProduct(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null) return NotFound();
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return product;
         }
     }
 }
