@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HPlusSport.API.Controllers
 {
-    [Route("/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
@@ -82,7 +82,7 @@ namespace HPlusSport.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Product>> RemoveProduct(int id)
+        public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
 
@@ -92,6 +92,27 @@ namespace HPlusSport.API.Controllers
             await _context.SaveChangesAsync();
 
             return product;
+        }
+
+        [HttpPost]
+        [Route("delete")]
+        public async Task<ActionResult<Product[]>> DeleteMultipleProducts([FromQuery] int[] ids)
+        {
+            List<Product> deletedProducts = new();
+
+            foreach (int id in ids)
+            {
+                var product = await _context.Products.FindAsync(id);
+
+                if (product == null) return NotFound();
+
+                deletedProducts.Add(product);
+            }
+
+            _context.Products.RemoveRange(deletedProducts);
+            await _context.SaveChangesAsync();
+
+            return Ok(deletedProducts);
         }
     }
 }
